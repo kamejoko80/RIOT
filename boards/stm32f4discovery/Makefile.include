@@ -6,6 +6,10 @@ export CPU_MODEL = stm32f407vg
 PORT_LINUX ?= /dev/ttyUSB0
 PORT_DARWIN ?= $(firstword $(sort $(wildcard /dev/tty.SLAB_USBtoUART*)))
 
+ifneq (,$(filter netdev_default gnrc_netdev_default,$(USEMODULE)))
+USEMODULE += mrf24j40 gnrc_netdev
+endif
+
 # setup serial terminal
 include $(RIOTMAKE)/tools/serial.inc.mk
 

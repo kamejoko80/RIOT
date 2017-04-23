@@ -28,6 +28,12 @@
 extern "C" {
 #endif
 
+#define MRF24J40_PARAMS_BOARD  { .spi = 0, \
+                                 .spi_clk = MRF24J40_PARAM_SPI_CLK, \
+                                 .cs_pin = GPIO_PIN(PORT_A, 4), \
+                                 .int_pin = GPIO_PIN(PORT_C, 5), \
+                                 .reset_pin = GPIO_PIN(PORT_B, 1) }
+
 /**
  * @name xtimer configuration
  * @{
