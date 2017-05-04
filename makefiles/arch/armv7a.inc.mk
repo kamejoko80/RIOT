@@ -7,7 +7,7 @@ endif
 
 # Define build specific options
 export CFLAGS_CPU     = -mcpu=$(MCPU) -march=$(CPU_ARCH)
-export CFLAGS_CPU    += -mfpu=neon -ffast-math -mfloat-abi=softfp -mno-unaligned-access
+export CFLAGS_CPU    += -mfpu=neon -ffast-math -mfloat-abi=hard -mno-unaligned-access
 export CFLAGS_CPU    += -std=gnu99 --specs=nosys.specs
 
 export CFLAGS_LINK    = -ffunction-sections -fdata-sections -fno-builtin -fshort-enums
@@ -66,8 +66,8 @@ endif
 include $(RIOTCPU)/armv7a_common/Makefile.include
 
 # use the nano-specs of Newlib when available
-USEMODULE += newlib_nano
-export USE_NANO_SPECS = 1
+#USEMODULE += newlib_nano
+#export USE_NANO_SPECS = 1
 
 # Avoid overriding the default rule:
 all:
