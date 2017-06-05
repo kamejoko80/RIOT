@@ -2,5 +2,9 @@
 export CPU = stm32l4
 export CPU_MODEL = stm32l432kc
 
+ifneq (,$(filter netdev_default gnrc_netdev_default,$(USEMODULE)))
+USEMODULE += mrf24j40 gnrc_netdev
+endif
+
 # load the common Makefile.include for Nucleo-32 boards
 include $(RIOTBOARD)/nucleo32-common/Makefile.include

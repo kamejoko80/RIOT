@@ -25,6 +25,40 @@
 
 #include "board_common.h"
 
+#define MRF24J40_PARAMS_BOARD  { .spi = 0, \
+                                 .spi_clk = MRF24J40_PARAM_SPI_CLK, \
+                                 .cs_pin = GPIO_PIN(PORT_A, 11), \
+                                 .int_pin = GPIO_PIN(PORT_B, 6), \
+                                 .reset_pin = GPIO_PIN(PORT_B, 1) }
+/*
+   MRF24J40MA 
+   _____________
+  |             |
+  |             |
+  |_____________|
+1_| GND     GND |_12
+  |             |
+2_| RST     GND |_11
+  |             |
+3_| WK      VIN |_10
+  |             |
+4_| INT     NC  |_9
+  |             |
+5_| SDI     CSn |_8
+  |             | 
+6_| SCK     SDO |_7
+  |_____________|
+
+ (2) RST <-> PB1
+ (4) INT <-> PB6
+ (5) SDI <-> PB5
+ (6) SCK <-> PB3
+ (7) SDO <-> PB4
+ (8) CSn <-> PA11
+
+ */
+
+
 #ifdef __cplusplus
 extern "C" {}
 #endif
