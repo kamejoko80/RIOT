@@ -33,6 +33,32 @@ extern "C" {
                                  .cs_pin = GPIO_PIN(PORT_A, 4), \
                                  .int_pin = GPIO_PIN(PORT_C, 5), \
                                  .reset_pin = GPIO_PIN(PORT_B, 1) }
+/*
+   MRF24J40MA 
+   _____________
+  |             |
+  |             |
+  |_____________|
+1_| GND     GND |_12
+  |             |
+2_| RST     GND |_11
+  |             |
+3_| WK      VIN |_10
+  |             |
+4_| INT     NC  |_9
+  |             |
+5_| SDI     CSn |_8
+  |             | 
+6_| SCK     SDO |_7
+  |_____________|
+
+ (2) RST <-> PB1
+ (4) INT <-> PC5
+ (5) SDI <-> PA7
+ (6) SCK <-> PA5
+ (7) SDO <-> PA6
+ (8) CSn <-> PA4
+*/
 
 /**
  * @name xtimer configuration
