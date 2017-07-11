@@ -27,7 +27,7 @@
 
 #define MRF24J40_PARAMS_BOARD  { .spi = 0, \
                                  .spi_clk = MRF24J40_PARAM_SPI_CLK, \
-                                 .cs_pin = GPIO_PIN(PORT_A, 11), \
+                                 .cs_pin = GPIO_PIN(PORT_B, 7), \
                                  .int_pin = GPIO_PIN(PORT_B, 6), \
                                  .reset_pin = GPIO_PIN(PORT_B, 1) }
 /*
@@ -54,7 +54,7 @@
  (5) SDI <-> PB5
  (6) SCK <-> PB3
  (7) SDO <-> PB4
- (8) CSn <-> PA11
+ (8) CSn <-> PB7
 
  */
 

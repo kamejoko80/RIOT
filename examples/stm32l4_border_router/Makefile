@@ -19,11 +19,11 @@ BOARD_BLACKLIST += mips-malta pic32-wifire pic32-clicker# No full UART available
 
 # use ethos (ethernet over serial) for network communication and stdio over
 # UART, but not on native, as native has a tap interface towards the host.
-ifeq (,$(filter native,$(BOARD)))
 GNRC_NETIF_NUMOF := 2
+CFLAGS += '-DSLIP_UART=UART_DEV(1)'
+CFLAGS += -DSLIP_BAUDRATE=115200
 USEMODULE += gnrc_netdev
 FEATURES_REQUIRED += periph_uart
-endif
 
 # Include packages that pull up and auto-init the link layer.
 # NOTE: 6LoWPAN will be included if IEEE802.15.4 devices are present
