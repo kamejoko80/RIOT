@@ -9,19 +9,19 @@
  */
 
 /**
- * @defgroup    cpu_mips_pic32mx MIPS PIC32MX
+ * @defgroup    cpu_mips_pic32mx Microchip PIC32MX
  * @ingroup     cpu
- * @brief       main CPU definitions for pic32mx devices.
+ * @brief       CPU definitions for Microchip PIC32MX devices.
  * @{
  *
  * @file
- * @brief       main CPU definitions for pic32mx devices.
+ * @brief       CPU definitions for pic32mx devices.
  *
  * @author      Neil Jones <neil.jones@imgtec.com>
  */
 
-#ifndef _CPU_H_
-#define _CPU_H_
+#ifndef CPU_H
+#define CPU_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -51,5 +51,5 @@ static inline void cpu_print_last_instruction(void)
 }
 #endif
 
-#endif
+#endif /* CPU_H */
 /** @} */

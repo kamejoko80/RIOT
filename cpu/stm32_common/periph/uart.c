@@ -9,6 +9,7 @@
 
 /**
  * @ingroup     cpu_stm32_common
+ * @ingroup     drivers_periph_uart
  * @{
  *
  * @file
@@ -29,8 +30,6 @@
 #include "assert.h"
 #include "periph/uart.h"
 #include "periph/gpio.h"
-
-#ifdef UART_NUMOF
 
 #define RXENABLE            (USART_CR1_RE | USART_CR1_RXNEIE)
 
@@ -72,7 +71,7 @@ int uart_init(uart_t uart, uint32_t baudrate, uart_rx_cb_t rx_cb, void *arg)
         gpio_init_af(uart_config[uart].rx_pin, uart_config[uart].rx_af);
 #endif
     }
-#ifdef UART_USE_HW_FC
+#ifdef MODULE_STM32_PERIPH_UART_HW_FC
     if (uart_config[uart].cts_pin != GPIO_UNDEF) {
         gpio_init(uart_config[uart].cts_pin, GPIO_IN);
         gpio_init(uart_config[uart].rts_pin, GPIO_OUT);
@@ -108,7 +107,7 @@ int uart_init(uart_t uart, uint32_t baudrate, uart_rx_cb_t rx_cb, void *arg)
         dev(uart)->CR1 = (USART_CR1_UE | USART_CR1_TE);
     }
 
-#ifdef UART_USE_HW_FC
+#ifdef MODULE_STM32_PERIPH_UART_HW_FC
     if (uart_config[uart].cts_pin != GPIO_UNDEF) {
         /* configure hardware flow control */
         dev(uart)->CR3 = (USART_CR3_RTSE | USART_CR3_CTSE);
@@ -124,7 +123,8 @@ void uart_write(uart_t uart, const uint8_t *data, size_t len)
 
     for (size_t i = 0; i < len; i++) {
 #if defined(CPU_FAM_STM32F0) || defined(CPU_FAM_STM32L0) \
-    || defined(CPU_FAM_STM32F3) || defined(CPU_FAM_STM32L4)
+    || defined(CPU_FAM_STM32F3) || defined(CPU_FAM_STM32L4) \
+    || defined(CPU_FAM_STM32F7)
         while (!(dev(uart)->ISR & USART_ISR_TXE)) {}
         dev(uart)->TDR = data[i];
 #else
@@ -136,7 +136,8 @@ void uart_write(uart_t uart, const uint8_t *data, size_t len)
     /* make sure the function is synchronous by waiting for the transfer to
      * finish */
 #if defined(CPU_FAM_STM32F0) || defined(CPU_FAM_STM32L0) \
-    || defined(CPU_FAM_STM32F3) || defined(CPU_FAM_STM32L4)
+    || defined(CPU_FAM_STM32F3) || defined(CPU_FAM_STM32L4) \
+    || defined(CPU_FAM_STM32F7)
     while (!(dev(uart)->ISR & USART_ISR_TC)) {}
 #else
     while (!(dev(uart)->SR & USART_SR_TC)) {}
@@ -158,7 +159,8 @@ void uart_poweroff(uart_t uart)
 static inline void irq_handler(uart_t uart)
 {
 #if defined(CPU_FAM_STM32F0) || defined(CPU_FAM_STM32L0) \
-    || defined(CPU_FAM_STM32F3) || defined(CPU_FAM_STM32L4)
+    || defined(CPU_FAM_STM32F3) || defined(CPU_FAM_STM32L4) \
+    || defined(CPU_FAM_STM32F7)
 
     uint32_t status = dev(uart)->ISR;
 
@@ -227,5 +229,3 @@ void UART_5_ISR(void)
     irq_handler(UART_DEV(5));
 }
 #endif
-
-#endif /* UART_NUMOF */

@@ -76,7 +76,7 @@ struct thread_data {
  */
 struct thread_data_deleter {
   /**
-   * @brief Called by the deleter of a thread object to manage the lifetime of
+   * @brief Called by the deleter of a thread object to manage the lifetime of
    *        the thread internal management data.
    */
   void operator()(thread_data* ptr) {
@@ -240,7 +240,12 @@ public:
    */
   template <class F, class... Args>
   explicit thread(F&& f, Args&&... args);
+
+  /**
+   * @brief Disallow copy constructor.
+   */
   thread(const thread&) = delete;
+
   /**
    * @brief Move constructor.
    */
@@ -251,7 +256,11 @@ public:
 
   ~thread();
 
+  /**
+   * @brief Disallow copy assignment operator.
+   */
   thread& operator=(const thread&) = delete;
+
   /**
    * @brief Move assignment operator.
    */

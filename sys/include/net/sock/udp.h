@@ -63,7 +63,7 @@
  * implementation (e.g. `gnrc_ipv6_default` for @ref net_gnrc GNRC) and at least
  * one network device.
  *
- * After including the header file for @ref net_sock_udp "UDP sock", we create some 
+ * After including the header file for @ref net_sock_udp "UDP sock", we create some
  * buffer space `buf` to store the data received by the server:
  *
  * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.c}
@@ -313,7 +313,7 @@ typedef struct sock_udp sock_udp_t;
  *                      @ref SOCK_ADDR_ANY_NETIF or equal to sock_udp_ep_t::netif
  *                      of @p local if `local != NULL`.
  * @param[in] flags     Flags for the sock object. See also
- *                      [sock flags](net_sock_flags).
+ *                      [sock flags](@ref net_sock_flags).
  *                      May be 0.
  *
  * @return  0 on success.
@@ -389,6 +389,8 @@ int sock_udp_get_remote(sock_udp_t *sock, sock_udp_ep_t *ep);
  * @return  0, if no received data is available, but everything is in order.
  * @return  -EADDRNOTAVAIL, if local of @p sock is not given.
  * @return  -EAGAIN, if @p timeout is `0` and no data is available.
+ * @return  -EINVAL, if @p remote is invalid or @p sock is not properly
+ *          initialized (or closed while sock_udp_recv() blocks).
  * @return  -ENOBUFS, if buffer space is not large enough to store received
  *          data.
  * @return  -ENOMEM, if no memory was available to receive @p data.

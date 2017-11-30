@@ -9,18 +9,17 @@
  */
 
 /**
- * @defgroup    cpu_mips_pic32mz MIPS PIC32MZ
- * @ingroup     cpu
+ * @ingroup     cpu_mips_pic32mz
  * @{
  *
  * @file
- * @brief       CPU definitions for pic32mz devices.
+ * @brief       CPU definitions for Microchip PIC32MZ devices.
  *
  * @author      Neil Jones <neil.jones@imgtec.com>
  */
 
-#ifndef _CPU_CONF_H_
-#define _CPU_CONF_H_
+#ifndef CPU_CONF_H
+#define CPU_CONF_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -59,13 +58,11 @@ extern "C" {
 #define THREAD_STACKSIZE_IDLE           (512 + THREAD_EXTRA_STACKSIZE_PRINTF)
 #endif
 #endif
-
-#define ISR_STACKSIZE                   (0)
 /** @} */
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif
+#endif /* CPU_CONF_H */
 /** @} */

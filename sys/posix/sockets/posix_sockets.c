@@ -47,7 +47,8 @@
 typedef union {
     /* is not supposed to be used, this is only for the case that no
      * sock module was added (maybe useful for UNIX sockets?) */
-    /* cppcheck-suppress unusedStructMember */
+    /* cppcheck-suppress unusedStructMember
+     * (reason: is not supposed to be used) */
     int undef;
 #ifdef MODULE_SOCK_IP
     sock_ip_t raw;              /**< raw IP sock */
@@ -442,8 +443,7 @@ int accept(int socket, struct sockaddr *restrict address,
                                                   sa_len);
 
                 }
-                int fd = fd_new(new_s - _socket_pool, socket_read, socket_write,
-                                socket_close);
+                int fd = vfs_bind(VFS_ANY_FD, 0, &socket_ops, new_s);
                 if (fd < 0) {
                     errno = ENFILE;
                     res = -1;

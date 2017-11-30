@@ -20,13 +20,16 @@
  * @author          Alexandre Abadie <alexandre.abadie@inria.fr>
 */
 
-#ifndef STM32L0_CPU_CONF_H
-#define STM32L0_CPU_CONF_H
+#ifndef CPU_CONF_H
+#define CPU_CONF_H
 
 #include "cpu_conf_common.h"
 
 #ifdef CPU_MODEL_STM32L073RZ
 #include "vendor/stm32l073xx.h"
+#endif
+#ifdef CPU_MODEL_STM32L072CZ
+#include "vendor/stm32l072xx.h"
 #endif
 #ifdef CPU_MODEL_STM32L053R8
 #include "vendor/stm32l053xx.h"
@@ -44,12 +47,16 @@ extern "C" {
  * @{
  */
 #define CPU_DEFAULT_IRQ_PRIO            (1U)
-#define CPU_IRQ_NUMOF                   (31U)
+#if defined(CPU_MODEL_STM32L031K6)
+#define CPU_IRQ_NUMOF                   (30U)
+#else
+#define CPU_IRQ_NUMOF                   (32U)
+#endif
 /** @} */
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* STM32F0_CPU_CONF_H */
+#endif /* CPU_CONF_H */
 /** @} */

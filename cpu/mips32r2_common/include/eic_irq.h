@@ -7,8 +7,7 @@
  */
 
 /**
- * @defgroup    cpu_mips32r2_commom MIPS32R2 Common
- * @ingroup     cpu
+ * @ingroup     cpu_mips32r2_commom
  * @{
  *
  * @file
@@ -17,8 +16,8 @@
  * @author      Neil Jones <neil.jones@imgtec.com>
  */
 
-#ifndef EIC_IRQ_H_
-#define EIC_IRQ_H_
+#ifndef EIC_IRQ_H
+#define EIC_IRQ_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -65,5 +64,5 @@ void eic_irq_ack(int irq_num);
 }
 #endif
 
-#endif
+#endif /* EIC_IRQ_H */
 /** @} */

@@ -26,8 +26,8 @@
  */
 
 
-#ifndef GNRC_IPV6_H
-#define GNRC_IPV6_H
+#ifndef NET_GNRC_IPV6_H
+#define NET_GNRC_IPV6_H
 
 #include "kernel_types.h"
 #include "net/gnrc.h"
@@ -36,8 +36,7 @@
 #include "net/ipv6.h"
 #include "net/gnrc/ipv6/ext.h"
 #include "net/gnrc/ipv6/hdr.h"
-#include "net/gnrc/ipv6/nc.h"
-#include "net/gnrc/ipv6/netif.h"
+#include "net/gnrc/ipv6/nib.h"
 
 #ifdef MODULE_FIB
 #include "net/fib.h"
@@ -170,7 +169,7 @@ ipv6_hdr_t *gnrc_ipv6_get_header(gnrc_pktsnip_t *pkt);
 }
 #endif
 
-#endif /* GNRC_IPV6_H */
+#endif /* NET_GNRC_IPV6_H */
 /**
  * @}
  */

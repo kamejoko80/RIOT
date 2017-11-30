@@ -32,20 +32,12 @@
 #include "xtimer.h"
 #endif
 
-#ifdef MODULE_RTC
-#include "periph/rtc.h"
-#endif
-
 #ifdef MODULE_GNRC_SIXLOWPAN
 #include "net/gnrc/sixlowpan.h"
 #endif
 
 #ifdef MODULE_GNRC_IPV6
 #include "net/gnrc/ipv6.h"
-#endif
-
-#ifdef MODULE_GNRC_IPV6_NETIF
-#include "net/gnrc/ipv6/netif.h"
 #endif
 
 #ifdef MODULE_L2_PING
@@ -72,33 +64,35 @@
 #include "lwip.h"
 #endif
 
-#ifdef MODULE_FIB
-#include "net/fib.h"
+#ifdef MODULE_OPENTHREAD
+#include "ot.h"
 #endif
 
-#ifdef MODULE_TINYMT32
-#include "random.h"
+#ifdef MODULE_FIB
+#include "net/fib.h"
 #endif
 
 #ifdef MODULE_GCOAP
 #include "net/gcoap.h"
 #endif
 
+#ifdef MODULE_GNRC_IPV6_NIB
+#include "net/gnrc/ipv6/nib.h"
+#endif
+
+
 #define ENABLE_DEBUG (0)
 #include "debug.h"
 
 void auto_init(void)
 {
-#ifdef MODULE_TINYMT32
-    random_init(0);
+#ifdef MODULE_PRNG
+    void auto_init_random(void);
+    auto_init_random();
 #endif
 #ifdef MODULE_XTIMER
     DEBUG("Auto init xtimer module.\n");
     xtimer_init();
-#endif
-#ifdef MODULE_RTC
-    DEBUG("Auto init rtc module.\n");
-    rtc_init();
 #endif
 #ifdef MODULE_SHT11
     DEBUG("Auto init SHT11 module.\n");
@@ -140,6 +134,10 @@ void auto_init(void)
     DEBUG("Bootstraping lwIP.\n");
     lwip_bootstrap();
 #endif
+#ifdef MODULE_OPENTHREAD
+    extern void openthread_bootstrap(void);
+    openthread_bootstrap();
+#endif
 #ifdef MODULE_GCOAP
     DEBUG("Auto init gcoap module.\n");
     gcoap_init();
@@ -148,6 +146,10 @@ void auto_init(void)
     DEBUG("Mounting /dev\n");
     extern void auto_init_devfs(void);
     auto_init_devfs();
+#endif
+#ifdef MODULE_GNRC_IPV6_NIB
+    DEBUG("Auto init gnrc_ipv6_nib module.\n");
+    gnrc_ipv6_nib_init();
 #endif
 
 /* initialize network devices */
@@ -183,9 +185,9 @@ void auto_init(void)
     auto_init_ethos();
 #endif
 
-#ifdef MODULE_GNRC_SLIP
-    extern void auto_init_slip(void);
-    auto_init_slip();
+#ifdef MODULE_SLIPDEV
+    extern void auto_init_slipdev(void);
+    auto_init_slipdev();
 #endif
 
 #ifdef MODULE_CC110X
@@ -229,10 +231,6 @@ void auto_init(void)
 #endif
 
 #endif /* MODULE_AUTO_INIT_GNRC_NETIF */
-
-#ifdef MODULE_GNRC_IPV6_NETIF
-    gnrc_ipv6_netif_init_by_dev();
-#endif
 
 #ifdef MODULE_GNRC_UHCPC
     extern void auto_init_gnrc_uhcpc(void);
@@ -279,6 +277,18 @@ void auto_init(void)
     extern void auto_init_mma8x5x(void);
     auto_init_mma8x5x();
 #endif
+#ifdef MODULE_MPL3115A2
+    extern void auto_init_mpl3115a2(void);
+    auto_init_mpl3115a2();
+#endif
+#ifdef MODULE_MPU9150
+extern void auto_init_mpu9150(void);
+auto_init_mpu9150();
+#endif
+#ifdef MODULE_GROVE_LEDBAR
+    extern void auto_init_grove_ledbar(void);
+    auto_init_grove_ledbar();
+#endif
 #ifdef MODULE_SI70XX
     extern void auto_init_si70xx(void);
     auto_init_si70xx();
@@ -287,9 +297,9 @@ void auto_init(void)
     extern void auto_init_bmp180(void);
     auto_init_bmp180();
 #endif
-#ifdef MODULE_BME280
-    extern void auto_init_bme280(void);
-    auto_init_bme280();
+#if defined(MODULE_BME280) || defined(MODULE_BMP280)
+    extern void auto_init_bmx280(void);
+    auto_init_bmx280();
 #endif
 #ifdef MODULE_JC42
     extern void auto_init_jc42(void);
@@ -303,9 +313,17 @@ void auto_init(void)
     extern void auto_init_hdc1000(void);
     auto_init_hdc1000();
 #endif
+#ifdef MODULE_HTS221
+    extern void auto_init_hts221(void);
+    auto_init_hts221();
+#endif
 #ifdef MODULE_DHT
     extern void auto_init_dht(void);
     auto_init_dht();
+#endif
+#ifdef MODULE_TMP006
+    extern void auto_init_tmp006(void);
+    auto_init_tmp006();
 #endif
 #ifdef MODULE_TCS37727
     extern void auto_init_tcs37727(void);
@@ -326,6 +344,10 @@ void auto_init(void)
 #ifdef MODULE_LSM6DSL
     extern void auto_init_lsm6dsl(void);
     auto_init_lsm6dsl();
+#endif
+#ifdef MODULE_ADCXX1C
+    extern void auto_init_adcxx1c(void);
+    auto_init_adcxx1c();
 #endif
 
 #endif /* MODULE_AUTO_INIT_SAUL */
@@ -349,4 +371,12 @@ void auto_init(void)
 #endif
 
 #endif /* MODULE_AUTO_INIT_STORAGE */
+
+#ifdef MODULE_AUTO_INIT_CAN
+    DEBUG("auto_init CAN\n");
+
+    extern void auto_init_candev(void);
+    auto_init_candev();
+
+#endif /* MODULE_AUTO_INIT_CAN */
 }

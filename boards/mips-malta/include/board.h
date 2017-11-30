@@ -20,8 +20,8 @@
  * @author      Neil Jones <neil.jones@imgtec.com>
  */
 
-#ifndef _BOARD_H_
-#define _BOARD_H_
+#ifndef BOARD_H
+#define BOARD_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -34,7 +34,7 @@ extern "C" {
 #define TICKS_PER_US (15)
 
 /**
- * @brief       Board level initialisation
+ * @brief       Board level initialization
  */
 void board_init(void);
 
@@ -42,5 +42,5 @@ void board_init(void);
 }
 #endif
 
-#endif /* _BOARD_H_ */
+#endif /* BOARD_H */
 /** @} */

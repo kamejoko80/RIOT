@@ -91,7 +91,7 @@ a.SelectItem:active {
 #nav-tree {
   background: @well-bg;
 }
-#nav-tree img {
+#nav-tree img, #nav-tree span {
   -webkit-box-sizing: content-box;
   box-sizing: content-box;
 }
@@ -139,6 +139,9 @@ div.toc li, div.toc-sm li {
 div.ingroups {
   font-size: 10pt;
 }
+div.ingroups .el::before {
+  content: " "
+}
 div.header {
   background: none;
   border-bottom: 1px solid @page-header-border-color;
@@ -182,6 +185,7 @@ div.fragment {
   font-size: @font-size-base;
   line-height: @line-height-base;
   margin: 0 0 10px;
+  padding: 10px;
   overflow: visible;
   page-break-inside: avoid;
   word-break: break-all;
@@ -265,6 +269,9 @@ table.directory {
 }
 .navpath li.navelem a {
   font-family: @font-family-base;
+}
+.memtitle {
+  display: none;
 }
 .memitem {
   margin-bottom: 20px;
@@ -434,6 +441,10 @@ dl.todo > dt {
 }
 .params .paramdir {
   font-family: @font-family-monospace;
+  padding-right: 0.5em;
+}
+.params .paramname {
+  padding-right: 2em;
 }
 .icon {
   font-family: @font-family-base;

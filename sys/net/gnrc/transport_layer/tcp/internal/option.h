@@ -9,18 +9,18 @@
 /**
  * @defgroup    net_gnrc_tcp TCP
  * @ingroup     net_gnrc
- * @brief       RIOT's tcp implementation for the gnrc stack
+ * @brief       RIOT's TCP implementation for the GNRC network stack.
  *
  * @{
  *
  * @file
- * @brief       TCP option handling declarations
+ * @brief       TCP option handling declarations.
  *
  * @author      Simon Brummer <simon.brummer@posteo.de>
  */
 
-#ifndef GNRC_TCP_INTERNAL_OPTION_H
-#define GNRC_TCP_INTERNAL_OPTION_H
+#ifndef OPTION_H
+#define OPTION_H
 
 #include <stdint.h>
 #include "assert.h"
@@ -32,40 +32,40 @@ extern "C" {
 #endif
 
 /**
- * @brief Helper Function to build the MSS Option
+ * @brief Helper function to build the MSS option.
  *
- * @param[in]  mss   tcp header to be checked
+ * @param[in] mss   MSS value that should be set.
  *
- * @return   Valid MSS Option.
+ * @returns   MSS option value.
  */
-inline static uint32_t _option_build_mss(uint16_t mss)
+static inline uint32_t _option_build_mss(uint16_t mss)
 {
     return (((uint32_t) TCP_OPTION_KIND_MSS << 24) |
             ((uint32_t) TCP_OPTION_LENGTH_MSS << 16) | mss);
 }
 
 /**
- * @brief Helper Function to build the combined option and control flag field
+ * @brief Helper function to build the combined option and control flag field.
  *
- * @param[in]  nopts   Number of Options
- * @param[in]  ctl     Control Flags
+ * @param[in]  nopts   Number of options.
+ * @param[in]  ctl     Control flag field.
  *
- * @return   Valid option size and control field.
+ * @returns   Bitfield with encoded control bits and number of options.
  */
-inline static uint16_t _option_build_offset_control(uint16_t nopts, uint16_t ctl)
+static inline uint16_t _option_build_offset_control(uint16_t nopts, uint16_t ctl)
 {
     assert(TCP_HDR_OFFSET_MIN <= nopts && nopts <= TCP_HDR_OFFSET_MAX);
     return (nopts << 12) | ctl;
 }
 
 /**
- * @brief Parses options of a given tcp-header pktsnip.
+ * @brief Parses options of a given TCP header.
  *
- * @param[out] tcb   transmission control block to memorize options.
- * @param[in]  hdr   tcp header to be checked
+ * @param[in,out] tcb   TCB holding the connection information.
+ * @param[in]     hdr   TCP header to be parsed.
  *
- * @return   Zero on success
- * @return   A negative value on error
+ * @returns   Zero on success.
+ *            Negative value on error.
  */
 int _option_parse(gnrc_tcp_tcb_t *tcb, tcp_hdr_t *hdr);
 
@@ -73,5 +73,5 @@ int _option_parse(gnrc_tcp_tcb_t *tcb, tcp_hdr_t *hdr);
 }
 #endif
 
-#endif /* GNRC_TCP_INTERNAL_OPTION_H*/
+#endif /* OPTION_H */
 /** @} */

@@ -76,8 +76,8 @@
  *
  * @author  Martine Lenders <mlenders@inf.fu-berlin.de>
  */
-#ifndef NETDEV_TEST_H
-#define NETDEV_TEST_H
+#ifndef NET_NETDEV_TEST_H
+#define NET_NETDEV_TEST_H
 
 #include "mutex.h"
 
@@ -156,13 +156,13 @@ typedef int (*netdev_test_get_cb_t)(netdev_t *dev, void *value,
  * @brief   Callback type to handle set commands
  *
  * @param[in] dev       network device descriptor
- * @param[out] value    value to set
+ * @param[in] value     value to set
  * @param[in] value_len the length of @p value
  *
  * @return  number of bytes used from @p value
  * @return  <0 on error
  */
-typedef int (*netdev_test_set_cb_t)(netdev_t *dev, void *value,
+typedef int (*netdev_test_set_cb_t)(netdev_t *dev, const void *value,
                                     size_t value_len);
 
 /**
@@ -302,5 +302,5 @@ void netdev_test_reset(netdev_test_t *dev);
 }
 #endif
 
-#endif /* NETDEV_TEST_H */
+#endif /* NET_NETDEV_TEST_H */
 /** @} */

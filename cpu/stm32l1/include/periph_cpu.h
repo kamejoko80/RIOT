@@ -28,6 +28,15 @@ extern "C" {
 #endif
 
 /**
+ * @name    Starting address of the CPU ID
+ */
+#ifdef CPU_MODEL_STM32L151RBA
+#define CPUID_ADDR          (0x1ff80050)
+#else
+#define CPUID_ADDR          (0x1ff800d0)
+#endif
+
+/**
  * @brief   Available ports on the STM32L1 family
  */
 enum {
@@ -40,15 +49,6 @@ enum {
     PORT_G = 7,             /**< port G */
     PORT_H = 5,             /**< port H */
 };
-
-/**
- * @brief   DAC line configuration data
- */
-typedef struct {
-    gpio_t pin;             /**< pin connected to the line */
-    uint8_t chan;           /**< DAC device used for this line */
-} dac_conf_t;
-
 
 /**
  * @brief   ADC channel configuration data

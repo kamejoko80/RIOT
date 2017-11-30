@@ -25,8 +25,8 @@
  * @author      Hauke Petersen <hauke.petersen@fu-berlin.de>
  */
 
-#ifndef TELOSB_BOARD_H
-#define TELOSB_BOARD_H
+#ifndef BOARD_H
+#define BOARD_H
 
 #include "cpu.h"
 
@@ -54,8 +54,6 @@ extern "C" {
  * @name    Xtimer configuration
  * @{
  */
-#define XTIMER_DEV                  (0)
-#define XTIMER_CHAN                 (0)
 #define XTIMER_WIDTH                (16)
 #define XTIMER_BACKOFF              (40)
 /** @} */
@@ -116,4 +114,4 @@ extern "C" {
 #endif
 
 /** @} */
-#endif /*  TELOSB_BOARD_H */
+#endif /* BOARD_H */

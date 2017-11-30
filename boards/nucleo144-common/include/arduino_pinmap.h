@@ -23,6 +23,7 @@
 #define ARDUINO_PINMAP_H
 
 #include "periph/gpio.h"
+#include "periph/adc.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -59,7 +60,7 @@ extern "C" {
 #define ARDUINO_PIN_A0          GPIO_PIN(PORT_A, 3)
 #define ARDUINO_PIN_A1          GPIO_PIN(PORT_C, 0)
 #define ARDUINO_PIN_A2          GPIO_PIN(PORT_C, 3)
-#if defined(CPU_MODEL_STM32F413ZH)
+#if defined(CPU_MODEL_STM32F413ZH) || defined(CPU_MODEL_STM32F412ZG)
 #define ARDUINO_PIN_A3          GPIO_PIN(PORT_C, 1)
 #define ARDUINO_PIN_A4          GPIO_PIN(PORT_C, 4)
 #define ARDUINO_PIN_A5          GPIO_PIN(PORT_C, 5)
@@ -73,6 +74,18 @@ extern "C" {
 #define ARDUINO_PIN_A5          GPIO_PIN(PORT_F, 10)
 #endif
 /** @ */
+
+/**
+ * @name    Mapping of Ardunino analog pins to RIOT ADC lines
+ * @{
+ */
+#define ARDUINO_A0              ADC_LINE(0)
+#define ARDUINO_A1              ADC_LINE(1)
+#define ARDUINO_A2              ADC_LINE(2)
+#define ARDUINO_A3              ADC_LINE(3)
+#define ARDUINO_A4              ADC_LINE(4)
+#define ARDUINO_A5              ADC_LINE(5)
+/** @} */
 
 #ifdef __cplusplus
 }

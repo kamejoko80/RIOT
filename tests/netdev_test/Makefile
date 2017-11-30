@@ -10,10 +10,13 @@ FEATURES_REQUIRED += periph_timer # xtimer required for this application
 USEMODULE += gnrc
 USEMODULE += gnrc_neterr
 USEMODULE += gnrc_netif
-USEMODULE += gnrc_netdev
+USEMODULE += netdev_eth
 USEMODULE += netdev_test
 USEMODULE += od
 
 CFLAGS += -DGNRC_PKTBUF_SIZE=200
 
 include $(RIOTBASE)/Makefile.include
+
+test:
+	tests/01-run.py

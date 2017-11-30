@@ -26,26 +26,44 @@ extern "C" {
 #endif
 
 /**
- * @name    Clock system configuration
+ * @name    Clock settings
+ *
+ * @note    This is auto-generated from
+ *          `cpu/stm32_common/dist/clk_conf/clk_conf.c`
  * @{
  */
-#define CLOCK_HSE           (8000000U)          /* external oscillator */
-#define CLOCK_CORECLOCK     (180000000U)        /* desired core clock frequency */
-
-/* the actual PLL values are automatically generated */
-#define CLOCK_PLL_M         (CLOCK_HSE / 1000000)
-#define CLOCK_PLL_N         ((CLOCK_CORECLOCK / 1000000) * 2)
-#define CLOCK_PLL_P         (2U)
-#define CLOCK_PLL_Q         (CLOCK_PLL_N / 48)
+/* give the target core clock (HCLK) frequency [in Hz],
+ * maximum: 180MHz */
+#define CLOCK_CORECLOCK     (180000000U)
+/* 0: no external high speed crystal available
+ * else: actual crystal frequency [in Hz] */
+#define CLOCK_HSE           (8000000U)
+/* 0: no external low speed crystal available,
+ * 1: external crystal available (always 32.768kHz) */
+#define CLOCK_LSE           (1)
+/* peripheral clock setup */
 #define CLOCK_AHB_DIV       RCC_CFGR_HPRE_DIV1
-#define CLOCK_APB1_DIV      RCC_CFGR_PPRE1_DIV2
-#define CLOCK_APB2_DIV      RCC_CFGR_PPRE2_DIV1
-#define CLOCK_FLASH_LATENCY FLASH_ACR_LATENCY_5WS
-
-/* bus clocks for simplified peripheral initialization, UPDATE MANUALLY! */
 #define CLOCK_AHB           (CLOCK_CORECLOCK / 1)
-#define CLOCK_APB1          (CLOCK_CORECLOCK / 2)
-#define CLOCK_APB2          (CLOCK_CORECLOCK / 1)
+#define CLOCK_APB1_DIV      RCC_CFGR_PPRE1_DIV4     /* max 45MHz */
+#define CLOCK_APB1          (CLOCK_CORECLOCK / 4)
+#define CLOCK_APB2_DIV      RCC_CFGR_PPRE2_DIV2     /* max 90MHz */
+#define CLOCK_APB2          (CLOCK_CORECLOCK / 2)
+
+/* Main PLL factors */
+#define CLOCK_PLL_M          (4)
+#define CLOCK_PLL_N          (180)
+#define CLOCK_PLL_P          (2)
+#define CLOCK_PLL_Q          (0)
+
+/* PLL SAI configuration */
+#define CLOCK_ENABLE_PLL_SAI (1)
+#define CLOCK_PLL_SAI_M      (4)
+#define CLOCK_PLL_SAI_N      (192)
+#define CLOCK_PLL_SAI_P      (8)
+#define CLOCK_PLL_SAI_Q      (0)
+
+/* Use alternative source for 48MHz clock */
+#define CLOCK_USE_ALT_48MHZ  (1)
 /** @} */
 
 /**
@@ -87,28 +105,28 @@ static const uart_conf_t uart_config[] = {
 #endif
     },
     {
-        .dev        = USART2,
-        .rcc_mask   = RCC_APB1ENR_USART2EN,
-        .rx_pin     = GPIO_PIN(PORT_A, 3),
-        .tx_pin     = GPIO_PIN(PORT_A, 2),
-        .rx_af      = GPIO_AF7,
-        .tx_af      = GPIO_AF7,
-        .bus        = APB1,
-        .irqn       = USART2_IRQn,
+        .dev        = USART6,
+        .rcc_mask   = RCC_APB2ENR_USART6EN,
+        .rx_pin     = GPIO_PIN(PORT_G, 9),
+        .tx_pin     = GPIO_PIN(PORT_G, 14),
+        .rx_af      = GPIO_AF8,
+        .tx_af      = GPIO_AF8,
+        .bus        = APB2,
+        .irqn       = USART6_IRQn,
 #ifdef UART_USE_DMA
         .dma_stream = 5,
         .dma_chan   = 4
 #endif
     },
     {
-        .dev        = USART1,
-        .rcc_mask   = RCC_APB2ENR_USART1EN,
-        .rx_pin     = GPIO_PIN(PORT_A, 10),
-        .tx_pin     = GPIO_PIN(PORT_A, 9),
+        .dev        = USART2,
+        .rcc_mask   = RCC_APB1ENR_USART2EN,
+        .rx_pin     = GPIO_PIN(PORT_D, 6),
+        .tx_pin     = GPIO_PIN(PORT_D, 5),
         .rx_af      = GPIO_AF7,
         .tx_af      = GPIO_AF7,
-        .bus        = APB2,
-        .irqn       = USART1_IRQn,
+        .bus        = APB1,
+        .irqn       = USART2_IRQn,
 #ifdef UART_USE_DMA
         .dma_stream = 4,
         .dma_chan   = 4
@@ -118,9 +136,9 @@ static const uart_conf_t uart_config[] = {
 
 #define UART_0_ISR          (isr_usart3)
 #define UART_0_DMA_ISR      (isr_dma1_stream6)
-#define UART_1_ISR          (isr_usart2)
+#define UART_1_ISR          (isr_usart6)
 #define UART_1_DMA_ISR      (isr_dma1_stream5)
-#define UART_2_ISR          (isr_usart1)
+#define UART_2_ISR          (isr_usart2)
 #define UART_2_DMA_ISR      (isr_dma1_stream4)
 
 #define UART_NUMOF          (sizeof(uart_config) / sizeof(uart_config[0]))
@@ -132,34 +150,24 @@ static const uart_conf_t uart_config[] = {
  */
 static const pwm_conf_t pwm_config[] = {
     {
-        .dev      = TIM2,
-        .rcc_mask = RCC_APB1ENR_TIM2EN,
-        .chan     = { { .pin = GPIO_PIN(PORT_A, 15), .cc_chan = 0},
-                      { .pin = GPIO_PIN(PORT_B,  3), .cc_chan = 1},
-                      { .pin = GPIO_PIN(PORT_B, 10), .cc_chan = 2},
-                      { .pin = GPIO_PIN(PORT_B,  2), .cc_chan = 3} },
+        .dev      = TIM1,
+        .rcc_mask = RCC_APB2ENR_TIM1EN,
+        .chan     = { { .pin = GPIO_PIN(PORT_E,  9) /* D6 */, .cc_chan = 0},
+                      { .pin = GPIO_PIN(PORT_E, 11) /* D5 */, .cc_chan = 1},
+                      { .pin = GPIO_PIN(PORT_E, 13) /* D3 */, .cc_chan = 2},
+                      { .pin = GPIO_UNDEF,                    .cc_chan = 0} },
         .af       = GPIO_AF1,
-        .bus      = APB1
+        .bus      = APB2
     },
     {
-        .dev      = TIM3,
-        .rcc_mask = RCC_APB1ENR_TIM3EN,
-        .chan     = { { .pin = GPIO_PIN(PORT_B, 4), .cc_chan = 0 },
-                      { .pin = GPIO_UNDEF, .cc_chan = 0 },
-                      { .pin = GPIO_UNDEF, .cc_chan = 0 },
-                      { .pin = GPIO_UNDEF, .cc_chan = 0 } },
+        .dev      = TIM4,
+        .rcc_mask = RCC_APB1ENR_TIM4EN,
+        .chan     = { { .pin = GPIO_PIN(PORT_D, 15) /* D9 */, .cc_chan = 3},
+                      { .pin = GPIO_UNDEF,                    .cc_chan = 0},
+                      { .pin = GPIO_UNDEF,                    .cc_chan = 0},
+                      { .pin = GPIO_UNDEF,                    .cc_chan = 0} },
         .af       = GPIO_AF2,
         .bus      = APB1
-    },
-    {
-        .dev      = TIM8,
-        .rcc_mask = RCC_APB2ENR_TIM8EN,
-        .chan     = { { .pin = GPIO_PIN(PORT_C, 6), .cc_chan = 0},
-                      { .pin = GPIO_PIN(PORT_C, 7), .cc_chan = 1},
-                      { .pin = GPIO_PIN(PORT_C, 8), .cc_chan = 2},
-                      { .pin = GPIO_PIN(PORT_C, 9), .cc_chan = 3} },
-        .af       = GPIO_AF3,
-        .bus      = APB2
     },
 };
 
@@ -196,7 +204,7 @@ static const spi_conf_t spi_config[] = {
         .mosi_pin = GPIO_PIN(PORT_A, 7),
         .miso_pin = GPIO_PIN(PORT_A, 6),
         .sclk_pin = GPIO_PIN(PORT_A, 5),
-        .cs_pin   = GPIO_PIN(PORT_A, 4),
+        .cs_pin   = GPIO_UNDEF,
         .af       = GPIO_AF5,
         .rccmask  = RCC_APB2ENR_SPI1EN,
         .apbbus   = APB2
@@ -239,13 +247,6 @@ static const spi_conf_t spi_config[] = {
  * @{
  */
 #define ADC_NUMOF          (0)
-/** @} */
-
-/**
- * @name    DAC configuration
- * @{
- */
-#define DAC_NUMOF          (0)
 /** @} */
 
 #ifdef __cplusplus

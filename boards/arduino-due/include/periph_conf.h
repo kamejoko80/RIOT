@@ -28,7 +28,7 @@ extern "C" {
 #endif
 
 /**
- * @name Clock configuration
+ * @name    Clock configuration
  * @{
  */
 /* targeted system core clock */
@@ -48,13 +48,12 @@ extern "C" {
 /** @} */
 
 /**
- * @name Timer peripheral configuration
+ * @name    Timer peripheral configuration
  * @{
  */
 static const timer_conf_t timer_config[] = {
-    /* dev, channel 0 ID */
-    { TC0, ID_TC0 },
-    { TC1, ID_TC3 },
+    { .dev = TC0, .id_ch0 = ID_TC0 },
+    { .dev = TC1, .id_ch0 = ID_TC3 }
 };
 
 #define TIMER_0_ISR         isr_tc0
@@ -64,15 +63,42 @@ static const timer_conf_t timer_config[] = {
 /** @} */
 
 /**
- * @name UART configuration
+ * @name    UART configuration
  * @{
  */
 static const uart_conf_t uart_config[] = {
-    /* device, rx port, tx port, rx pin, tx pin, mux, PMC bit, IRGn line */
-    {(Uart *)UART,   PIOA, PIOA,  8,  9, GPIO_MUX_A, ID_UART,   UART_IRQn},
-    {(Uart *)USART0, PIOA, PIOA, 10, 11, GPIO_MUX_A, ID_USART0, USART0_IRQn},
-    {(Uart *)USART1, PIOA, PIOA, 12, 13, GPIO_MUX_A, ID_USART1, USART1_IRQn},
-    {(Uart *)USART3, PIOD, PIOD,  4,  5, GPIO_MUX_B, ID_USART3, USART3_IRQn}
+    {
+        .dev    = (Uart *)UART,
+        .rx_pin = GPIO_PIN(PA, 8),
+        .tx_pin = GPIO_PIN(PA, 9),
+        .mux    = GPIO_MUX_A,
+        .pmc_id = ID_UART,
+        .irqn   = UART_IRQn
+    },
+    {
+        .dev    = (Uart *)USART0,
+        .rx_pin = GPIO_PIN(PA, 10),
+        .tx_pin = GPIO_PIN(PA, 11),
+        .mux    = GPIO_MUX_A,
+        .pmc_id = ID_USART0,
+        .irqn   = USART0_IRQn
+    },
+    {
+        .dev    = (Uart *)USART1,
+        .rx_pin = GPIO_PIN(PA, 12),
+        .tx_pin = GPIO_PIN(PA, 13),
+        .mux    = GPIO_MUX_A,
+        .pmc_id = ID_USART1,
+        .irqn   = USART1_IRQn
+    },
+    {
+        .dev    = (Uart *)USART3,
+        .rx_pin = GPIO_PIN(PD, 5),
+        .tx_pin = GPIO_PIN(PD, 4),
+        .mux    = GPIO_MUX_B,
+        .pmc_id = ID_USART3,
+        .irqn   = USART3_IRQn
+    }
 };
 
 /* define interrupt vectors */
@@ -85,7 +111,7 @@ static const uart_conf_t uart_config[] = {
 /** @} */
 
 /**
-* @name SPI configuration
+* @name     SPI configuration
 * @{
 */
 static const spi_conf_t spi_config[] = {
@@ -107,10 +133,10 @@ static const spi_conf_t spi_config[] = {
  * @{
  */
 static const pwm_chan_conf_t pwm_chan[] = {
-    { .pin = GPIO_PIN(PC, 21), .hwchan = 4, },
-    { .pin = GPIO_PIN(PC, 22), .hwchan = 5, },
-    { .pin = GPIO_PIN(PC, 23), .hwchan = 6, },
-    { .pin = GPIO_PIN(PC, 24), .hwchan = 7, }
+    { .pin = GPIO_PIN(PC, 21), .hwchan = 4 },
+    { .pin = GPIO_PIN(PC, 22), .hwchan = 5 },
+    { .pin = GPIO_PIN(PC, 23), .hwchan = 6 },
+    { .pin = GPIO_PIN(PC, 24), .hwchan = 7 }
 };
 
 #define PWM_NUMOF           (1U)

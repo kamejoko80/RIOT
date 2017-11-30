@@ -1,6 +1,7 @@
 /*
  * Copyright (C) 2014 Freie Universität Berlin, Hinnerk van Bruinehsen
  *               2016 Laurent Navet <laurent.navet@gmail.com>
+ *               2017 HAW Hamburg, Dimitri Nahm
  *
  * This file is subject to the terms and conditions of the GNU Lesser
  * General Public License v2.1. See the file LICENSE in the top level
@@ -17,6 +18,7 @@
  * @author      Hinnerk van Bruinehsen <h.v.bruinehsen@fu-berlin.de>
  * @author      Laurent Navet <laurent.navet@gmail.com>
  * @author      Hauke Petersen <hauke.petersen@fu-berlin.de>
+ * @author      Dimitri Nahm <dimitri.nahm@haw-hamburg.de>
  */
 
 #ifndef PERIPH_CONF_H
@@ -30,7 +32,7 @@ extern "C" {
  * @name    Clock configuration
  * @{
  */
-#define CLOCK_CORECLOCK     (16000000L)
+#define CLOCK_CORECLOCK     (16000000UL)
 /** @} */
 
 /**
@@ -111,31 +113,52 @@ extern "C" {
 /**
  * @name    SPI configuration
  *
- * The atmega2560 has only one hardware SPI with fixed pin configuration, so all
- * we can do here, is to enable or disable it...
+ * The atmega2560/atmega1281/atmega328p has only one hardware SPI with fixed pin
+ * configuration, so all we can do here, is to enable or disable it...
  *
- * The fixed pins for arduino uno and duemilanove are:
+ * The fixed pins for arduino uno and duemilanove (atmega328p) are:
  * MOSI - PB3 (Arduino pin 11)
  * MISO - PB4 (Arduino pin 12)
  * SCK  - PB5 (Arduino pin 13)
  * SS   - PB2 (Arduino pin 10) -> this pin is configured as output, but not used
  *
- * The fixed pins for arduino mega2560 are:
+ * The fixed pins for arduino-mega2560 and atmega1281 are:
  * MOSI - PB2 (Arduino pin 51)
  * MISO - PB3 (Arduino pin 50)
  * SCK  - PB1 (Arduino pin 52)
  * SS   - PB0 (Arduino pin 53) -> this pin is configured as output, but not used
  *
+ * The SS pin must be configured as output for the SPI device to work as
+ * master correctly, though we do not use it for now (as we handle the chip
+ * select externally for now)
+ *
  * @{
  */
 #define SPI_NUMOF           1           /* set to 0 to disable SPI */
+/** @} */
 
-#ifdef CPU_ATMEGA328P
-#define MEGA_PRR            PRR         /* Power Reduction Register is PRR */
-#endif
+/**
+ * @name    I2C configuration
+ * @{
+ */
+#define I2C_NUMOF           1
+/** @} */
 
-#ifdef CPU_ATMEGA2560
-#define MEGA_PRR            PRR0        /* Power Reduction Register is PRR0 */
+/**
+ * @name    ADC configuration
+ *
+ * The number of ADC channels of the atmega328p depends on the package:
+ *  - 6-channel 10-bit ADC in PDIP package
+ *  - 8-channel 10-bit ADC in TQFP and QFN/MLF package
+ * Arduino UNO / Duemilanove has thereby 6 channels. But only 5 channels can be
+ * used for ADC, because the pin of ADC5 emulate a software triggered interrupt.
+ *  -> boards -> arduino-atmega-common -> include -> board_common.h
+ * @{
+ */
+#if defined (CPU_ATMEGA328P) || defined (CPU_ATMEGA1281)
+#define ADC_NUMOF       (8U)
+#elif defined (CPU_ATMEGA2560)
+#define ADC_NUMOF       (16U)
 #endif
 /** @} */
 

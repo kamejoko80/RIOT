@@ -26,26 +26,35 @@
 extern "C" {
 #endif
 
-/**
- * @name    Clock system configuration
- * @{
- **/
-#define CLOCK_HSE           (16000000U)             /* frequency of external oscillator */
-#define CLOCK_CORECLOCK     (72000000U)             /* targeted core clock frequency */
-/* configuration of PLL prescaler and multiply values */
-/* CORECLOCK := CLOCK_SOURCE / PLL_DIV * PLL_MUL */
-#define CLOCK_PLL_DIV       (2)
-#define CLOCK_PLL_MUL       (9)
-/* configuration of peripheral bus clock prescalers */
-#define CLOCK_AHB_DIV       RCC_CFGR_HPRE_DIV1      /* AHB clock -> 72MHz */
-#define CLOCK_APB2_DIV      RCC_CFGR_PPRE2_DIV1     /* APB2 clock -> 72MHz */
-#define CLOCK_APB1_DIV      RCC_CFGR_PPRE1_DIV2     /* APB1 clock -> 36MHz */
 
-/* bus clocks for simplified peripheral initialization, UPDATE MANUALLY! */
-#define CLOCK_AHB           (CLOCK_CORECLOCK / 1)
-#define CLOCK_APB2          (CLOCK_CORECLOCK / 1)
-#define CLOCK_APB1          (CLOCK_CORECLOCK / 2)
-/** @} */
+/**
+ * @name    Clock settings
+ *
+ * @note    This is auto-generated from
+ *          `cpu/stm32_common/dist/clk_conf/clk_conf.c`
+ * @{
+ */
+/* give the target core clock (HCLK) frequency [in Hz],
+ * maximum: 72MHz */
+ #define CLOCK_CORECLOCK      (72000000U)
+ /* 0: no external high speed crystal available
+  * else: actual crystal frequency [in Hz] */
+ #define CLOCK_HSE            (16000000U)
+ /* 0: no external low speed crystal available,
+  * 1: external crystal available (always 32.768kHz) */
+ #define CLOCK_LSE            (1)
+ /* peripheral clock setup */
+ #define CLOCK_AHB_DIV        RCC_CFGR_HPRE_DIV1
+ #define CLOCK_AHB            (CLOCK_CORECLOCK / 1)
+ #define CLOCK_APB1_DIV       RCC_CFGR_PPRE1_DIV2     /* max 36MHz */
+ #define CLOCK_APB1           (CLOCK_CORECLOCK / 2)
+ #define CLOCK_APB2_DIV       RCC_CFGR_PPRE2_DIV1     /* max 72MHz */
+ #define CLOCK_APB2           (CLOCK_CORECLOCK / 1)
+
+ /* PLL factors */
+ #define CLOCK_PLL_PREDIV     (2)
+ #define CLOCK_PLL_MUL        (9)
+ /** @} */
 
 /**
  * @name    ADC configuration
@@ -113,13 +122,6 @@ static const uart_conf_t uart_config[] = {
 #define UART_1_ISR          (isr_usart2)
 
 #define UART_NUMOF          (sizeof(uart_config) / sizeof(uart_config[0]))
-/** @} */
-
-/**
- * @name    DAC configuration
- * @{
- */
-#define DAC_NUMOF           (0)
 /** @} */
 
 /**

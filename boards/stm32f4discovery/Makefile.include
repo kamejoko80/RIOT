@@ -13,5 +13,8 @@ endif
 # setup serial terminal
 include $(RIOTMAKE)/tools/serial.inc.mk
 
+export DEBUG_ADAPTER ?= stlink
+export STLINK_VERSION ?= 2
+
 # this board uses openocd
 include $(RIOTMAKE)/tools/openocd.inc.mk

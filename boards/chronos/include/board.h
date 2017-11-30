@@ -18,8 +18,8 @@
  * @author      unknown
  */
 
-#ifndef CHRONOS_BOARD_H
-#define CHRONOS_BOARD_H
+#ifndef BOARD_H
+#define BOARD_H
 
 #include <stdint.h>
 
@@ -38,8 +38,6 @@ extern "C" {
  * @name    Xtimer configuration
  * @{
  */
-#define XTIMER_DEV                  (0)
-#define XTIMER_CHAN                 (0)
 #define XTIMER_WIDTH                (16)
 /** @} */
 
@@ -59,5 +57,5 @@ extern "C" {
 }
 #endif
 
-#endif /* CHRONOS_BOARD_H */
+#endif /* BOARD_H */
 /** @} */
