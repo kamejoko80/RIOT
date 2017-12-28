@@ -20,7 +20,7 @@ DEFAULT_TIMEOUT = 5
 
 class Strategy(object):
     def __init__(self, func=None):
-        if func != None:
+        if func is not None:
             if sys.version_info < (3,):
                 self.__class__.execute = types.MethodType(func, self, self.__class__)
             else:
@@ -43,7 +43,7 @@ class BoardStrategy(Strategy):
 
     def __run_make(self, application, make_targets, env=None):
         env = os.environ.copy()
-        if env != None:
+        if env is not None:
             env.update(env)
         env.update(self.board.to_env())
         cmd = ("make", "-C", application) + make_targets
@@ -81,7 +81,7 @@ class Board(object):
         def _reset_native_execute(obj, application, env=None, *args, **kwargs):
             pass
 
-        if (name == "native") and (reset == None):
+        if (name == "native") and (reset is None):
                 reset = _reset_native_execute
 
         self.name = name
@@ -161,12 +161,12 @@ class BoardGroup(object):
 def default_test_case(board_group, application, env=None):
     for board in board_group:
         env = os.environ.copy()
-        if env != None:
+        if env is not None:
             env.update(env)
         env.update(board.to_env())
         with pexpect.spawnu("make", ["-C", application, "term"], env=env,
                             timeout=DEFAULT_TIMEOUT,
-                           logfile=sys.stdout) as spawn:
+                            logfile=sys.stdout) as spawn:
             spawn.expect("TEST: SUCCESS")
 
 
@@ -191,17 +191,17 @@ def get_ipv6_address(spawn):
 
 def test_ipv6_send(board_group, application, env=None):
     env_sender = os.environ.copy()
-    if env != None:
+    if env is not None:
         env_sender.update(env)
     env_sender.update(board_group.boards[0].to_env())
     env_receiver = os.environ.copy()
-    if env != None:
+    if env is not None:
         env_receiver.update(env)
     env_receiver.update(board_group.boards[1].to_env())
     with pexpect.spawnu("make", ["-C", application, "term"], env=env_sender,
                         timeout=DEFAULT_TIMEOUT) as sender, \
-         pexpect.spawnu("make", ["-C", application, "term"], env=env_receiver,
-                        timeout=DEFAULT_TIMEOUT) as receiver:
+        pexpect.spawnu("make", ["-C", application, "term"], env=env_receiver,
+                       timeout=DEFAULT_TIMEOUT) as receiver:
         ipprot = random.randint(0x00, 0xff)
         receiver_ip = get_ipv6_address(receiver)
         receiver.sendline(u"ip server start %d" % ipprot)
@@ -215,17 +215,17 @@ def test_ipv6_send(board_group, application, env=None):
 
 def test_udpv6_send(board_group, application, env=None):
     env_sender = os.environ.copy()
-    if env != None:
+    if env is not None:
         env_sender.update(env)
     env_sender.update(board_group.boards[0].to_env())
     env_receiver = os.environ.copy()
-    if env != None:
+    if env is not None:
         env_receiver.update(env)
     env_receiver.update(board_group.boards[1].to_env())
     with pexpect.spawnu("make", ["-C", application, "term"], env=env_sender,
                         timeout=DEFAULT_TIMEOUT) as sender, \
-         pexpect.spawnu("make", ["-C", application, "term"], env=env_receiver,
-                        timeout=DEFAULT_TIMEOUT) as receiver:
+        pexpect.spawnu("make", ["-C", application, "term"], env=env_receiver,
+                       timeout=DEFAULT_TIMEOUT) as receiver:
         port = random.randint(0x0000, 0xffff)
         receiver_ip = get_ipv6_address(receiver)
 
@@ -240,17 +240,17 @@ def test_udpv6_send(board_group, application, env=None):
 
 def test_tcpv6_send(board_group, application, env=None):
     env_client = os.environ.copy()
-    if env != None:
+    if env is not None:
         env_client.update(env)
     env_client.update(board_group.boards[0].to_env())
     env_server = os.environ.copy()
-    if env != None:
+    if env is not None:
         env_server.update(env)
     env_server.update(board_group.boards[1].to_env())
     with pexpect.spawnu("make", ["-C", application, "term"], env=env_client,
                         timeout=DEFAULT_TIMEOUT) as client, \
-         pexpect.spawnu("make", ["-C", application, "term"], env=env_server,
-                        timeout=DEFAULT_TIMEOUT) as server:
+        pexpect.spawnu("make", ["-C", application, "term"], env=env_server,
+                       timeout=DEFAULT_TIMEOUT) as server:
         port = random.randint(0x0000, 0xffff)
         server_ip = get_ipv6_address(server)
         client_ip = get_ipv6_address(client)
@@ -270,17 +270,17 @@ def test_tcpv6_send(board_group, application, env=None):
 
 def test_triple_send(board_group, application, env=None):
     env_sender = os.environ.copy()
-    if env != None:
+    if env is not None:
         env_sender.update(env)
     env_sender.update(board_group.boards[0].to_env())
     env_receiver = os.environ.copy()
-    if env != None:
+    if env is not None:
         env_receiver.update(env)
     env_receiver.update(board_group.boards[1].to_env())
     with pexpect.spawnu("make", ["-C", application, "term"], env=env_sender,
                         timeout=DEFAULT_TIMEOUT) as sender, \
-         pexpect.spawnu("make", ["-C", application, "term"], env=env_receiver,
-                        timeout=DEFAULT_TIMEOUT) as receiver:
+        pexpect.spawnu("make", ["-C", application, "term"], env=env_receiver,
+                       timeout=DEFAULT_TIMEOUT) as receiver:
         udp_port = random.randint(0x0000, 0xffff)
         tcp_port = random.randint(0x0000, 0xffff)
         ipprot = random.randint(0x00, 0xff)
@@ -307,8 +307,9 @@ def test_triple_send(board_group, application, env=None):
         sender.expect_exact(u"Success: send 4 byte over TCP to server")
         receiver.expect(u"00000000  DE  AD  BE  EF")
 
+
 if __name__ == "__main__":
-    TestStrategy().execute([BoardGroup((Board("native", "tap0"), \
-                            Board("native", "tap1")))], \
+    TestStrategy().execute([BoardGroup((Board("native", "tap0"),
+                            Board("native", "tap1")))],
                            [test_ipv6_send, test_udpv6_send, test_tcpv6_send,
                             test_triple_send])

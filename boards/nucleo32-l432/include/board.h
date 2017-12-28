@@ -9,7 +9,7 @@
 
 /**
  * @defgroup    boards_nucleo32-l432 Nucleo32-L432
- * @ingroup     boards_nucleo
+ * @ingroup     boards_nucleo32
  * @brief       Board specific files for the nucleo32-l432 board
  * @{
  *
@@ -24,6 +24,40 @@
 #define BOARD_H
 
 #include "board_common.h"
+
+#define MRF24J40_PARAMS_BOARD  { .spi = 0, \
+                                 .spi_clk = MRF24J40_PARAM_SPI_CLK, \
+                                 .cs_pin = GPIO_PIN(PORT_B, 7), \
+                                 .int_pin = GPIO_PIN(PORT_B, 6), \
+                                 .reset_pin = GPIO_PIN(PORT_B, 1) }
+/*
+   MRF24J40MA 
+   _____________
+  |             |
+  |             |
+  |_____________|
+1_| GND     GND |_12
+  |             |
+2_| RST     GND |_11
+  |             |
+3_| WK      VIN |_10
+  |             |
+4_| INT     NC  |_9
+  |             |
+5_| SDI     CSn |_8
+  |             | 
+6_| SCK     SDO |_7
+  |_____________|
+
+ (2) RST <-> PB1 D6
+ (4) INT <-> PB6 D5
+ (5) SDI <-> PB5 D11
+ (6) SCK <-> PB3 D13
+ (7) SDO <-> PB4 D12
+ (8) CSn <-> PB7 D4
+
+ */
+
 
 #ifdef __cplusplus
 extern "C" {}
